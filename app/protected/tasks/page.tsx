@@ -102,7 +102,7 @@ export default function TasksPage() {
                   {task.description || 'No description'}
                 </p>
                 <div className="flex justify-between text-xs text-gray-500">
-                  <span>Due: {new Date(task.dueDate).toLocaleDateString()}</span>
+                  <span>Due: {task.deadline ? new Date(task.deadline).toLocaleDateString() : 'No date'}</span>
                   <span>{task.assigneeName || 'Unassigned'}</span>
                 </div>
               </div>

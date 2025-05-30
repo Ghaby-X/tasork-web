@@ -11,6 +11,7 @@ interface TaskHistory {
   timestamp: string;
   userId: string;
   username?: string;
+  description?: string;
 }
 
 export default function TaskDetailPage({ params }: { params: { taskId: string } }) {
