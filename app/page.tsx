@@ -6,31 +6,9 @@ import Link from 'next/link'
 
 export default function Home() {
   const router = useRouter()
-  const [loginUrl, setLoginUrl] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    // Check if user is already authenticated
-    const token = document.cookie.includes('id_token=')
-    if (token) {
-      router.push('/protected/dashboard')
-    }
-    
-    // Fetch login URL from backend
-    async function fetchLoginUrl() {
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/auth/login`)
-        if (response.ok) {
-          const data = await response.json()
-          setLoginUrl(data.login_url)
-        }
-      } catch (error) {
-        console.error('Failed to fetch login URL:', error)
-      }
-    }
-    
-    fetchLoginUrl()
-  }, [router])
+  const loginUrl = process.env.NEXT_PUBLIC_LOGIN_URL
 
   const handleAuth = (e: React.MouseEvent) => {
     e.preventDefault()
