@@ -2,6 +2,9 @@
 
 A modern task management system built with Next.js that integrates with the Tasork backend API. Tasork helps teams manage tasks, track progress, and collaborate efficiently.
 
+Backend: https://github.com/Ghaby-X/tasork-backend
+LiveURL: https://main.d36ea14wabu2og.amplifyapp.com/
+
 ## Features
 
 - User authentication with AWS Cognito
