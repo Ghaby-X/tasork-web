@@ -28,9 +28,8 @@ LiveURL: https://main.d36ea14wabu2og.amplifyapp.com/
 
 Tasork uses token-based authentication:
 - Login/Registration through AWS Cognito
-- Tokens (access_token, id_token, refresh_token) stored in localStorage
+- Tokens (access_token, id_token, refresh_token) storage
 - Protected API calls include x-id-token header
-- Token refresh mechanism for extended sessions
 
 ## Getting Started
 
@@ -55,6 +54,7 @@ Tasork uses token-based authentication:
 3. Create a `.env.local` file with the following variables
    ```
    NEXT_PUBLIC_API_URL=http://localhost:8080
+   NEXT_PUBLIC_LOGIN_URL="https://us-east-1nb3b5nefy.auth.us-east-1.amazoncognito.com/login?client_id=1d0lrujrjbh2es4vsul8q1i989&response_type=code&scope=email+openid+profile+phone&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fresolve"
    ```
 
 ### Development
