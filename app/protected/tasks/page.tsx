@@ -39,6 +39,8 @@ export default function TasksPage() {
         return 'bg-green-100 text-green-800';
       case 'in_progress':
         return 'bg-blue-100 text-blue-800';
+      case 'healthy':
+        return 'bg-blue-100 text-blue-800'; // Map 'healthy' to the same style as 'in_progress'
       case 'at_risk':
         return 'bg-yellow-100 text-yellow-800';
       case 'behind':
@@ -95,14 +97,14 @@ export default function TasksPage() {
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-medium text-lg">{task.title}</h3>
                   <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(task.status || 'pending')}`}>
-                    {(task.status || 'pending').replace('_', ' ')}
+                    {task.status === 'healthy' ? 'in progress' : (task.status || 'pending').replace('_', ' ')}
                   </span>
                 </div>
                 <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                   {task.description || 'No description'}
                 </p>
                 <div className="flex justify-between text-xs text-gray-500">
-                  <span>Due: {task.deadline ? new Date(task.deadline).toLocaleDateString() : 'No date'}</span>
+                  <span>Due: {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No date'}</span>
                   <span>{task.assigneeName || 'Unassigned'}</span>
                 </div>
               </div>

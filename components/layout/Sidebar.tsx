@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard, 
   CheckSquare, 
-  Settings, 
   LogOut,
   Users
 } from 'lucide-react';
@@ -20,23 +19,17 @@ export default function Sidebar() {
     return pathname === path || pathname.startsWith(`${path}/`);
   };
 
-  const handleLogout = async () => {
-    try {
-      // Call logout API
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
-        method: 'POST',
-        credentials: 'include',
-      });
-      
-      if (response.ok) {
-        // Clear local state
-        logout();
-        // Redirect to home
-        window.location.href = '/';
-      }
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
+  const handleLogout = () => {
+    // Clear tokens from localStorage
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('refresh_token');
+    
+    // Clear local state
+    logout();
+    
+    // Redirect to home
+    window.location.href = '/';
   };
 
   return (
@@ -83,17 +76,6 @@ export default function Sidebar() {
           Users
         </Link>
         
-        <Link
-          href="/protected/settings"
-          className={`flex items-center px-3 py-2 rounded-md ${
-            isActive('/protected/settings')
-              ? 'bg-primary text-white'
-              : 'text-gray-700 hover:bg-gray-100'
-          }`}
-        >
-          <Settings className="w-5 h-5 mr-3" />
-          Settings
-        </Link>
       </nav>
       
       <div className="p-4 border-t border-gray-200">

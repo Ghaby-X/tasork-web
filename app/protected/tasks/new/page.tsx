@@ -99,7 +99,8 @@ export default function NewTaskPage() {
         description,
         status,
         deadline,
-        assignee: assignees
+        assignee: assignees,
+        createdAt: new Date().toISOString()
       };
 
       await createTask(taskData);

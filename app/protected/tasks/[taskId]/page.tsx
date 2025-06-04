@@ -85,20 +85,32 @@ export default function TaskDetailPage({ params }: { params: { taskId: string } 
     switch (status) {
       case 'completed': return 'bg-green-100 text-green-800';
       case 'in_progress': return 'bg-blue-100 text-blue-800';
+      case 'healthy': return 'bg-blue-100 text-blue-800'; // Map 'healthy' to the same style as 'in_progress'
       case 'at_risk': return 'bg-yellow-100 text-yellow-800';
       case 'behind': return 'bg-red-100 text-red-800';
+      case 'pending': return 'bg-gray-100 text-gray-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
 
   const formatDate = (dateString: string) => {
     if (!dateString) return 'N/A';
-    return new Date(dateString).toLocaleDateString();
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   };
 
   const formatDateTime = (dateString: string) => {
     if (!dateString) return 'N/A';
-    return new Date(dateString).toLocaleString();
+    return new Date(dateString).toLocaleString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   if (isLoading) {
@@ -160,7 +172,7 @@ export default function TaskDetailPage({ params }: { params: { taskId: string } 
         <div className="flex justify-between items-start mb-6">
           <h1 className="text-2xl font-bold">{task.title}</h1>
           <span className={`px-3 py-1 rounded-full text-sm ${getStatusColor(task.status || 'pending')}`}>
-            {(task.status || 'pending').replace('_', ' ')}
+            {task.status === 'healthy' ? 'in progress' : (task.status || 'pending').replace('_', ' ')}
           </span>
         </div>
 
@@ -215,11 +227,11 @@ export default function TaskDetailPage({ params }: { params: { taskId: string } 
                 onChange={(e) => setStatus(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
               >
-                <option value="healthy">Healthy</option>
                 <option value="in_progress">In Progress</option>
                 <option value="at_risk">At Risk</option>
                 <option value="behind">Behind</option>
                 <option value="completed">Completed</option>
+                <option value="pending">Pending</option>
               </select>
             </div>
             
@@ -254,7 +266,7 @@ export default function TaskDetailPage({ params }: { params: { taskId: string } 
                   <div className={`w-2 h-2 rounded-full mt-2 mr-3 ${getStatusColor(entry.status)}`}></div>
                   <div>
                     <p>
-                      Status changed to <span className="font-medium">{entry.status.replace('_', ' ')}</span>
+                      Status changed to <span className="font-medium">{entry.status === 'healthy' ? 'in progress' : entry.status.replace('_', ' ')}</span>
                     </p>
                     {entry.description && (
                       <p className="text-sm text-gray-700 mt-1">
