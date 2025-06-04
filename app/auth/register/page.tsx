@@ -24,12 +24,17 @@ export default function RegisterPage() {
     }
 
     try {
+      // Get tokens from localStorage
+      const idToken = localStorage.getItem('id_token');
+      const refreshToken = localStorage.getItem('refresh_token');
+      
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/auth/registerTenant`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-id-token': idToken || '',
+          'x-refresh-token': refreshToken || '',
         },
-        credentials: 'include',
         body: JSON.stringify({
           tenantName,
           username
@@ -40,6 +45,12 @@ export default function RegisterPage() {
         const errorData = await response.json()
         throw new Error(errorData.message || 'Registration failed')
       }
+
+      // Store new tokens from response
+      const tokens = await response.json();
+      if (tokens.access_token) localStorage.setItem('access_token', tokens.access_token);
+      if (tokens.refresh_token) localStorage.setItem('refresh_token', tokens.refresh_token);
+      if (tokens.id_token) localStorage.setItem('id_token', tokens.id_token);
 
       setSuccess(true)
       setTimeout(() => {

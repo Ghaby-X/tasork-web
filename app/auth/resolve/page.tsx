@@ -35,18 +35,24 @@ export default function AuthResolvePage() {
         // Make API call with the code
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/auth/token?code=${code}`, {
           method: 'GET',
-          credentials: 'include', // Important: include cookies in the request
+          credentials: 'include',
         });
 
         if (!response.ok) {
           throw new Error('Failed to exchange code for tokens');
         }
 
-        // The API should set cookies in the response
-        // Parse cookies to check for tenantId
-        const cookies = parseCookies();
-        const id_token_raw = cookies['id_token'];
-        const id_token = id_token_raw ? jwtDecode<CustomJwtPayload>((id_token_raw)) : null;
+        // Get tokens from response
+        const tokens = await response.json();
+        
+        // Store tokens in localStorage
+        if (tokens.access_token) localStorage.setItem('access_token', tokens.access_token);
+        if (tokens.refresh_token) localStorage.setItem('refresh_token', tokens.refresh_token);
+        if (tokens.id_token) localStorage.setItem('id_token', tokens.id_token);
+        
+        // Get id_token from localStorage
+        const id_token_raw = localStorage.getItem('id_token');
+        const id_token = id_token_raw ? jwtDecode<CustomJwtPayload>(id_token_raw) : null;
 
         if (!id_token || !id_token.email || !id_token.sub) {
             throw new Error('Invalid code')

@@ -2,13 +2,30 @@ import axios from 'axios';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
 
+// Create an axios instance with request interceptor to add token header
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
-  },
-  withCredentials: true
+  }
 });
+
+// Add a request interceptor to include the id_token in all requests
+api.interceptors.request.use(
+  (config) => {
+    // Get token from localStorage (if we're in a browser environment)
+    if (typeof window !== 'undefined') {
+      const idToken = localStorage.getItem('id_token');
+      if (idToken) {
+        config.headers['x-id-token'] = idToken;
+      }
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // Auth API
 export const login = async (email: string, password: string) => {

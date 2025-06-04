@@ -15,11 +15,10 @@ export default function ProtectedLayout({
 
   useEffect(() => {
     // Check if user is authenticated
-    const cookies = parseCookies();
-    const hasToken = cookies['id_token'];
+    const hasToken = localStorage.getItem('id_token');
     
     if (!hasToken) {
-      router.push('/auth/login');
+      router.push('/');
     } else {
       setIsLoading(false);
     }
